@@ -98,6 +98,26 @@ ForgeAI uses a sequential workflow orchestrated by the Engineering Manager with 
 
 ---
 
+## Artifact Management
+
+ForgeAI maintains a structured artifact repository throughout the engineering workflow under the `artifacts/` directory in the sandbox filesystem. 
+
+### Folder Structure
+- `artifacts/requirements/` - Requirements Specification documents (`requirements_v<N>.md`)
+- `artifacts/architecture/` - Architecture Specification documents (`architecture_v<N>.md`)
+- `artifacts/backend/` - Backend blueprints (`backend_blueprint_v<N>.md`)
+- `artifacts/implementation/` - Generated production-ready source code (`implementation_v<N>.md`)
+- `artifacts/qa/` - QA reports and test scenarios (`qa_report_v<N>.md`)
+- `artifacts/security/` - Security assessment reports (`security_report_v<N>.md`)
+- `artifacts/review/` - Code reviewer reports (`review_report_v<N>.md`)
+- `artifacts/deployment/` - DevOps blueprints (`deployment_blueprint_v<N>.md`)
+
+### Versioning & Traceability
+- **Incremental Versioning**: Artifacts are never overwritten or deleted. Any revision requested during approval gates increments the version suffix (e.g. `_v1.md` -> `_v2.md`).
+- **Traceability References**: Every artifact contains a YAML metadata header detailing the Title, Version, Author (responsible subagent), Timestamp, Status (`Draft` or `Approved`), and the Parent Artifact file(s) from which it was generated (e.g. `architecture_v2.md` lists `requirements_v3.md` as its parent).
+
+---
+
 ## Example
 
 To demonstrate the workflow, consider the following business request:
