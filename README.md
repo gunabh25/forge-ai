@@ -33,7 +33,7 @@ By mirroring real engineering workflows, the project ensures that business reque
 * **Security Analysis**: Conducts application and API security reviews, threat modeling, secrets configuration checking, OWASP auditing, and cloud security review.
 * **DevOps Planning**: Designs containerization configurations, CI/CD pipelines, environment setups, and cloud infrastructure layout.
 * **Modular Agent Design**: Subagents are declared under individual directories, keeping instructions, configs, and scopes completely decoupled.
-* **Human-in-the-loop Ready**: Built on the Eve framework, which supports human approval gates for critical decisions and API calls.
+* **Human-in-the-loop Approvals**: Fully integrates two distinct approval checkpoints (Architecture Review and Engineering Review) using Eve's built-in `ask_question` tool to pause execution and route revision requests.
 * **Extensible Architecture**: Easy to introduce new specialists by adding agent subfolders with custom declarations and prompts.
 
 ---
@@ -75,18 +75,26 @@ graph TD
 
 ## Workflow
 
-ForgeAI uses a sequential workflow orchestrated by the Engineering Manager:
+ForgeAI uses a sequential workflow orchestrated by the Engineering Manager with Human-in-the-loop (HITL) approval checkpoints:
 
 1. **User Input**: The user submits a software feature request to the Engineering Manager.
 2. **Requirements Ingestion**: The Engineering Manager forwards the request to the Requirement Analyst. The analyst produces a structured requirements document.
 3. **Architecture Mapping**: The requirements document is passed to the Solution Architect, who translates it into a high-level system design.
-4. **Backend Blueprinting**: The requirements design is passed to the Backend Engineer, who maps out codebase structure, routing, and data models.
-5. **Implementation**: The AI Software Engineer converts the blueprint into modular, production-ready source code files.
-6. **Quality Assurance Strategy**: The generated code is sent to the QA Engineer, who designs a multi-layered testing plan and produces a QA report.
-7. **Code Quality Review**: The generated code is reviewed by the Code Reviewer to produce a detailed defect, compliance, and refactoring report.
-8. **Security Assessment**: The system design, source code, and configurations are sent to the Security Engineer, who conducts threat modeling and OWASP audits to produce a security assessment report.
-9. **Deployment Design**: The reviewed code is sent to the DevOps Engineer, who constructs Docker configs, CI/CD scripts, and cloud topologies.
-10. **Aggregation**: The Engineering Manager compiles all deliverables into a unified final output.
+4. **🧑 Human Approval Gate #1 (Architecture Review)**: The Engineering Manager pauses execution, transitions the state to `Awaiting Architecture Approval`, and presents a structured review summary to the user using the built-in `ask_question` tool.
+   - **Approve**: Continues automatically to the Backend Engineer.
+   - **Request Changes**: Ask for feedback, route it back to the Solution Architect for revisions, and re-presents the review screen.
+   - **Reject**: Terminates the workflow.
+5. **Backend Blueprinting**: The approved architecture design is passed to the Backend Engineer, who maps out codebase structure, routing, and data models.
+6. **Implementation**: The AI Software Engineer converts the blueprint into modular, production-ready source code files.
+7. **Quality Assurance Strategy**: The generated code is sent to the QA Engineer, who designs a multi-layered testing plan and produces a QA report.
+8. **Code Quality Review**: The generated code is reviewed by the Code Reviewer to produce a detailed defect, compliance, and refactoring report.
+9. **Security Assessment**: The system design, source code, and configurations are sent to the Security Engineer, who conducts threat modeling and OWASP audits to produce a security assessment report.
+10. **🧑 Human Approval Gate #2 (Engineering Review)**: The Engineering Manager pauses execution, transitions to `Awaiting Deployment Approval`, and presents an Engineering Review screen summarizing QA, Security, and Code Quality status.
+    - **Approve**: Continues automatically to the DevOps Engineer.
+    - **Request Changes**: The user selects which artifact needs revision (Backend Blueprint, Source Code, QA, Security, Code Review), types feedback, which is routed only to the responsible specialist. Once revised, the system re-presents the review screen.
+    - **Reject**: Terminates the workflow.
+11. **Deployment Design**: The DevOps Engineer constructs Docker configs, CI/CD scripts, and cloud topologies based on the approved codebase.
+12. **Aggregation**: The Engineering Manager compiles and presents all final deliverables to the user.
 
 ---
 
