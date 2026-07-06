@@ -22,12 +22,13 @@ By mirroring real engineering workflows, the project ensures that business reque
 
 ## Features
 
-* **Multi-Agent Architecture**: Built with multiple collaborative subagents specializing in requirements analysis, architecture, database schemas, API specs, coding, code review, and DevOps.
+* **Multi-Agent Architecture**: Built with multiple collaborative subagents specializing in requirements analysis, architecture, database schemas, API specs, coding, QA testing, code review, and DevOps.
 * **Engineering Manager Orchestration**: Features a central orchestrator that guides the sequential execution of tasks and passes deliverables between agents.
 * **Requirement Analysis**: Generates comprehensive functional and non-functional requirements documents, highlighting assumptions, risks, and engineering tasks.
 * **Solution Architecture**: Designs high-level software architectures, technology stacks, schemas, REST APIs, and external integrations.
 * **Backend Blueprint Generation**: Defines folder structures, domain models, controller routes, validation rules, and error handling strategies.
 * **AI Software Engineering**: Converts backend blueprints into clean, modular, and production-ready code blocks adhering to SOLID and DRY principles.
+* **QA Testing Planning**: Designs comprehensive unit, integration, API, and performance testing strategies, and outputs detailed QA test reports.
 * **Code Review**: Automatically reviews generated source code against quality standards, architecture compliance, bugs, performance bottlenecks, and security.
 * **DevOps Planning**: Designs containerization configurations, CI/CD pipelines, environment setups, and cloud infrastructure layout.
 * **Modular Agent Design**: Subagents are declared under individual directories, keeping instructions, configs, and scopes completely decoupled.
@@ -45,7 +46,8 @@ graph TD
     RA --> SA[Solution Architect]
     SA --> BE[Backend Engineer]
     BE --> SE[AI Software Engineer]
-    SE --> CR[Code Reviewer]
+    SE --> QA[QA Engineer]
+    QA --> CR[Code Reviewer]
     CR --> DE[DevOps Engineer]
     DE --> EM
     EM --> FinalOutput([Return Output Documents])
@@ -62,6 +64,7 @@ graph TD
 | Solution Architect | Designs the high-level system architecture, database schema, API contracts, and technology stack based on approved requirements. |
 | Backend Engineer | Converts architectural plans into structured backend blueprints detailing folder layouts, domain models, controllers, and services. |
 | AI Software Engineer | Implements production-ready, clean, and modular backend source code that adheres strictly to the backend blueprint. |
+| QA Engineer | Designs comprehensive software testing strategies (unit, integration, API, performance, end-to-end) and produces QA reports based on code. |
 | Code Reviewer | Performs a comprehensive code review to identify bugs, security issues, performance bottlenecks, and architectural compliance. |
 | DevOps Engineer | Designs the production deployment blueprint, including containerization configs, CI/CD pipelines, cloud resources, and monitoring setups. |
 
@@ -76,9 +79,10 @@ ForgeAI uses a sequential workflow orchestrated by the Engineering Manager:
 3. **Architecture Mapping**: The requirements document is passed to the Solution Architect, who translates it into a high-level system design.
 4. **Backend Blueprinting**: The requirements design is passed to the Backend Engineer, who maps out codebase structure, routing, and data models.
 5. **Implementation**: The AI Software Engineer converts the blueprint into modular, production-ready source code files.
-6. **Quality Assurance**: The generated code is reviewed by the Code Reviewer to produce a detailed defect and refactoring report.
-7. **Deployment Design**: The reviewed code is sent to the DevOps Engineer, who constructs Docker configs, CI/CD scripts, and cloud topologies.
-8. **Aggregation**: The Engineering Manager compiles all deliverables into a unified final output.
+6. **Quality Assurance Strategy**: The generated code is sent to the QA Engineer, who designs a multi-layered testing plan and produces a QA report.
+7. **Code Quality Review**: The generated code is reviewed by the Code Reviewer to produce a detailed defect, compliance, and refactoring report.
+8. **Deployment Design**: The reviewed code is sent to the DevOps Engineer, who constructs Docker configs, CI/CD scripts, and cloud topologies.
+9. **Aggregation**: The Engineering Manager compiles all deliverables into a unified final output.
 
 ---
 
@@ -94,6 +98,7 @@ The system processes the request as follows:
 * **Solution Architect**: Designs a multi-tenant relational schema for warehouses and stores, specifies the technology stack (e.g. PostgreSQL, Node.js), creates REST API schemas for stock transfer routes, and drafts the high-level architecture.
 * **Backend Engineer**: Formulates the folder layout, designs database model entities (Warehouse, Store, InventoryItem, StockTransfer), routes controller endpoints, and outlines the JWT auth middleware.
 * **AI Software Engineer**: Generates the TypeScript code for WarehouseController, StockTransferService, and AuthenticationMiddleware.
+* **QA Engineer**: Designs API integration tests, outlines inventory edge-cases (negative stock states), and creates load test specs for seventeen concurrent stores.
 * **Code Reviewer**: Reviews the generated TypeScript files to verify password hashing strength, check for potential N+1 queries in stock transfer queries, and list refactoring tasks.
 * **DevOps Engineer**: Creates a multi-container Docker Compose file, sets up GitHub Actions to run tests, and recommends a cloud deployment layout using AWS RDS and ECS.
 
@@ -118,6 +123,9 @@ agent/
     │   ├── agent.ts
     │   └── instructions.md
     ├── ai_software_engineer/  # AI Software Engineer subagent folder
+    │   ├── agent.ts
+    │   └── instructions.md
+    ├── qa_engineer/           # QA Engineer subagent folder
     │   ├── agent.ts
     │   └── instructions.md
     ├── code_reviewer/         # Code Reviewer subagent folder
@@ -154,7 +162,6 @@ agent/
 ## Future Roadmap
 
 * **Frontend Engineer Agent**: Introduce a specialist subagent to design and implement client-side user interfaces.
-* **QA Engineer Agent**: Create a subagent to write unit, integration, and end-to-end tests for generated code.
 * **Security Engineer Agent**: Add a dedicated agent to run static analysis and vulnerability scans on the codebase and deployment configurations.
 * **Database Engineer Agent**: Introduce a specialist to optimize query performance, design migrations, and configure replica setups.
 * **Product Manager Agent**: Implement an agent to draft product roadmaps, prioritize backlog issues, and verify feature scope.
