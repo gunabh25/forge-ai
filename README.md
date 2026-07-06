@@ -22,7 +22,7 @@ By mirroring real engineering workflows, the project ensures that business reque
 
 ## Features
 
-* **Multi-Agent Architecture**: Built with multiple collaborative subagents specializing in requirements analysis, architecture, database schemas, API specs, coding, QA testing, code review, and DevOps.
+* **Multi-Agent Architecture**: Built with multiple collaborative subagents specializing in requirements analysis, architecture, database schemas, API specs, coding, QA testing, code review, security review, and DevOps.
 * **Engineering Manager Orchestration**: Features a central orchestrator that guides the sequential execution of tasks and passes deliverables between agents.
 * **Requirement Analysis**: Generates comprehensive functional and non-functional requirements documents, highlighting assumptions, risks, and engineering tasks.
 * **Solution Architecture**: Designs high-level software architectures, technology stacks, schemas, REST APIs, and external integrations.
@@ -30,6 +30,7 @@ By mirroring real engineering workflows, the project ensures that business reque
 * **AI Software Engineering**: Converts backend blueprints into clean, modular, and production-ready code blocks adhering to SOLID and DRY principles.
 * **QA Testing Planning**: Designs comprehensive unit, integration, API, and performance testing strategies, and outputs detailed QA test reports.
 * **Code Review**: Automatically reviews generated source code against quality standards, architecture compliance, bugs, performance bottlenecks, and security.
+* **Security Analysis**: Conducts application and API security reviews, threat modeling, secrets configuration checking, OWASP auditing, and cloud security review.
 * **DevOps Planning**: Designs containerization configurations, CI/CD pipelines, environment setups, and cloud infrastructure layout.
 * **Modular Agent Design**: Subagents are declared under individual directories, keeping instructions, configs, and scopes completely decoupled.
 * **Human-in-the-loop Ready**: Built on the Eve framework, which supports human approval gates for critical decisions and API calls.
@@ -48,7 +49,8 @@ graph TD
     BE --> SE[AI Software Engineer]
     SE --> QA[QA Engineer]
     QA --> CR[Code Reviewer]
-    CR --> DE[DevOps Engineer]
+    CR --> SEC[Security Engineer]
+    SEC --> DE[DevOps Engineer]
     DE --> EM
     EM --> FinalOutput([Return Output Documents])
 ```
@@ -66,6 +68,7 @@ graph TD
 | AI Software Engineer | Implements production-ready, clean, and modular backend source code that adheres strictly to the backend blueprint. |
 | QA Engineer | Designs comprehensive software testing strategies (unit, integration, API, performance, end-to-end) and produces QA reports based on code. |
 | Code Reviewer | Performs a comprehensive code review to identify bugs, security issues, performance bottlenecks, and architectural compliance. |
+| Security Engineer | Reviews the architecture, implementation, and deployment blueprint from a security perspective to produce a security assessment report. |
 | DevOps Engineer | Designs the production deployment blueprint, including containerization configs, CI/CD pipelines, cloud resources, and monitoring setups. |
 
 ---
@@ -81,8 +84,9 @@ ForgeAI uses a sequential workflow orchestrated by the Engineering Manager:
 5. **Implementation**: The AI Software Engineer converts the blueprint into modular, production-ready source code files.
 6. **Quality Assurance Strategy**: The generated code is sent to the QA Engineer, who designs a multi-layered testing plan and produces a QA report.
 7. **Code Quality Review**: The generated code is reviewed by the Code Reviewer to produce a detailed defect, compliance, and refactoring report.
-8. **Deployment Design**: The reviewed code is sent to the DevOps Engineer, who constructs Docker configs, CI/CD scripts, and cloud topologies.
-9. **Aggregation**: The Engineering Manager compiles all deliverables into a unified final output.
+8. **Security Assessment**: The system design, source code, and configurations are sent to the Security Engineer, who conducts threat modeling and OWASP audits to produce a security assessment report.
+9. **Deployment Design**: The reviewed code is sent to the DevOps Engineer, who constructs Docker configs, CI/CD scripts, and cloud topologies.
+10. **Aggregation**: The Engineering Manager compiles all deliverables into a unified final output.
 
 ---
 
@@ -100,6 +104,7 @@ The system processes the request as follows:
 * **AI Software Engineer**: Generates the TypeScript code for WarehouseController, StockTransferService, and AuthenticationMiddleware.
 * **QA Engineer**: Designs API integration tests, outlines inventory edge-cases (negative stock states), and creates load test specs for seventeen concurrent stores.
 * **Code Reviewer**: Reviews the generated TypeScript files to verify password hashing strength, check for potential N+1 queries in stock transfer queries, and list refactoring tasks.
+* **Security Engineer**: Performs threat modeling on store-to-warehouse communications, reviews secrets encryption protocols, and audits OWASP Top 10 risks in input parameters.
 * **DevOps Engineer**: Creates a multi-container Docker Compose file, sets up GitHub Actions to run tests, and recommends a cloud deployment layout using AWS RDS and ECS.
 
 ---
@@ -129,6 +134,9 @@ agent/
     │   ├── agent.ts
     │   └── instructions.md
     ├── code_reviewer/         # Code Reviewer subagent folder
+    │   ├── agent.ts
+    │   └── instructions.md
+    ├── security_engineer/     # Security Engineer subagent folder
     │   ├── agent.ts
     │   └── instructions.md
     └── devops_engineer/       # DevOps Engineer subagent folder
@@ -162,7 +170,6 @@ agent/
 ## Future Roadmap
 
 * **Frontend Engineer Agent**: Introduce a specialist subagent to design and implement client-side user interfaces.
-* **Security Engineer Agent**: Add a dedicated agent to run static analysis and vulnerability scans on the codebase and deployment configurations.
 * **Database Engineer Agent**: Introduce a specialist to optimize query performance, design migrations, and configure replica setups.
 * **Product Manager Agent**: Implement an agent to draft product roadmaps, prioritize backlog issues, and verify feature scope.
 * **MCP Integration**: Connect specialized agents to Model Context Protocol (MCP) servers for enhanced local environment interactions.
